@@ -5,11 +5,12 @@ Static landing page for Unfreeze My Things, with the APK download. No build step
 
 ## Publishing on GitHub Pages
 
-Create a repo named `<your-username>.github.io` and push the contents of this folder
-(including `downloads/unfreeze-my-things.apk`) to it. The site goes live at
-`https://<your-username>.github.io/`. A user site is used so `app-ads.txt` sits at the
-domain root, where AdMob looks for it. Add that URL as the developer website in the Play
-Console store listing.
+This folder is pushed to https://github.com/Sparktnt/unfreeze-my-things and served by
+GitHub Pages (Settings → Pages → main / root) at https://sparktnt.github.io/unfreeze-my-things/.
+To update the site, commit here and `git push`.
+
+AdMob reads `app-ads.txt` from the domain root, which the separate `Sparktnt.github.io`
+repo already serves; the copy here is just a spare.
 
 ## Shipping a new APK
 
