@@ -21,4 +21,10 @@ repo already serves; the copy here is just a spare.
 4. In `index.html`, update the version, the size (`MB`, three places) and the SHA-256
    (`sha256sum downloads/unfreeze-my-things.apk`).
 
+## Browser demo (`play/`)
+
+`play/` is the first 8 levels of the game, for iPhone and desktop visitors. It's generated:
+after game changes, run `npm run build:demo` from the game repo (it rebuilds `play/` here),
+then commit and push this repo.
+
 This folder is its own git repo (the Pages repo); the game repo ignores it.

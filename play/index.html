@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="screen-orientation" content="portrait">
+    <meta name="theme-color" content="#1a1030">
+    <title>Unfreeze My Things - Demo</title>
+    <link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="game-canvas"></canvas>
+
+        <!-- Splash -->
+        <div id="splash-overlay" class="screen hidden">
+            <div class="splash-title-wrap">
+                <h1 class="game-title">Unfreeze My Things</h1>
+                <div class="game-subtitle">Quest for Perfection</div>
+            </div>
+        </div>
+
+        <!-- Main Menu -->
+        <div id="menu-overlay" class="screen hidden">
+            <button id="btn-settings" class="icon-btn menu-settings-btn" title="Settings">&#9881;</button>
+            <div class="menu-title-wrap">
+                <h1 class="game-title">Unfreeze My Things</h1>
+                <div class="game-subtitle">Quest for Perfection</div>
+            </div>
+            <div class="menu-buttons">
+                <button id="btn-start" class="candy-btn candy-btn-ice">
+                    <svg class="ice-btn-svg" viewBox="0 0 340 100" preserveAspectRatio="none" aria-hidden="true">
+                        <defs>
+                            <linearGradient id="iceBase" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#eaf7ff"/>
+                                <stop offset="45%" stop-color="#a9dcf7"/>
+                                <stop offset="100%" stop-color="#3f86bf"/>
+                            </linearGradient>
+                            <clipPath id="iceOutline">
+                                <polygon points="32,0 308,0 340,32 340,68 308,100 32,100 0,68 0,32"/>
+                            </clipPath>
+                        </defs>
+                        <g clip-path="url(#iceOutline)">
+                            <polygon points="32,0 308,0 340,32 340,68 308,100 32,100 0,68 0,32" fill="url(#iceBase)"/>
+                            <!-- Ring facets: outer edge paired with an inset point at the same
+                                 angular position, so they tile the ring with no gaps/overlaps. -->
+                            <polygon points="0,32 32,0 94.1,22.5 76.5,40.1" fill="#ffffff" fill-opacity="0.55" stroke="#ffffff" stroke-opacity="0.55" stroke-width="1.5"/>
+                            <polygon points="32,0 308,0 245.9,22.5 94.1,22.5" fill="#eaf7ff" fill-opacity="0.5" stroke="#ffffff" stroke-opacity="0.5" stroke-width="1.5"/>
+                            <polygon points="308,0 340,32 263.5,40.1 245.9,22.5" fill="#cfeeff" fill-opacity="0.4" stroke="#ffffff" stroke-opacity="0.45" stroke-width="1.5"/>
+                            <polygon points="340,32 340,68 263.5,59.9 263.5,40.1" fill="#8fcdf2" fill-opacity="0.4" stroke="#ffffff" stroke-opacity="0.35" stroke-width="1.5"/>
+                            <polygon points="340,68 308,100 245.9,77.5 263.5,59.9" fill="#5fa8de" fill-opacity="0.42" stroke="#ffffff" stroke-opacity="0.3" stroke-width="1.5"/>
+                            <polygon points="308,100 32,100 94.1,77.5 245.9,77.5" fill="#4a90cf" fill-opacity="0.45" stroke="#ffffff" stroke-opacity="0.3" stroke-width="1.5"/>
+                            <polygon points="32,100 0,68 76.5,59.9 94.1,77.5" fill="#3f86bf" fill-opacity="0.42" stroke="#ffffff" stroke-opacity="0.3" stroke-width="1.5"/>
+                            <polygon points="0,68 0,32 76.5,40.1 76.5,59.9" fill="#5fa8de" fill-opacity="0.4" stroke="#ffffff" stroke-opacity="0.35" stroke-width="1.5"/>
+                            <!-- Core facet -->
+                            <polygon points="76.5,40.1 94.1,22.5 245.9,22.5 263.5,40.1 263.5,59.9 245.9,77.5 94.1,77.5 76.5,59.9" fill="#bfe3fb" fill-opacity="0.22" stroke="#ffffff" stroke-opacity="0.4" stroke-width="1.5"/>
+                            <!-- Hot glossy highlight, top-left, where the light source hits hardest -->
+                            <polygon points="0,32 32,0 78,14 40,34" fill="#ffffff" fill-opacity="0.5"/>
+                            <g class="ice-btn-shimmer">
+                                <polygon points="20,110 60,-10 90,-10 50,110" fill="#ffffff" fill-opacity="0.3"/>
+                            </g>
+                        </g>
+                        <polygon points="32,0 308,0 340,32 340,68 308,100 32,100 0,68 0,32" fill="none" stroke="#ffffff" stroke-opacity="0.85" stroke-width="2.5"/>
+                        <circle class="ice-sparkle" cx="60" cy="20" r="2.2" fill="#ffffff"/>
+                        <circle class="ice-sparkle" cx="255" cy="16" r="1.8" fill="#ffffff"/>
+                        <circle class="ice-sparkle" cx="300" cy="55" r="1.6" fill="#ffffff"/>
+                        <circle class="ice-sparkle" cx="120" cy="85" r="1.8" fill="#ffffff"/>
+                        <circle class="ice-sparkle" cx="200" cy="70" r="1.6" fill="#ffffff"/>
+                    </svg>
+                    <span class="ice-btn-label">Start Game</span>
+                </button>
+                <div class="menu-row">
+                    <button id="btn-daily" class="candy-btn candy-btn-secondary menu-tile">
+                        <span>Daily Thing</span><span class="menu-tile-sub" id="daily-sub"></span>
+                    </button>
+                    <button id="btn-collection" class="candy-btn candy-btn-secondary menu-tile">
+                        <span>My Things</span><span class="menu-tile-sub">Your collection</span>
+                    </button>
+                </div>
+                <button id="btn-howtoplay" class="candy-btn candy-btn-secondary">How to Play</button>
+            </div>
+            <button id="btn-wheel" class="menu-side-btn menu-side-left" aria-label="Free Spins">
+                <span class="mini-wheel"><span class="mini-wheel-hub"></span></span>
+                <span class="mini-wheel-pointer"></span>
+                <span class="menu-side-dot"></span>
+                <span class="menu-side-label">Free Spins</span>
+            </button>
+            <button id="btn-menu-shop" class="menu-side-btn menu-side-right" aria-label="Shop">
+                <span class="menu-cart">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 3.5h2.3l2.4 11.2a1.6 1.6 0 0 0 1.6 1.3h8.6a1.6 1.6 0 0 0 1.5-1.2l1.8-6.8H6.1" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9.5" cy="20" r="1.7" fill="currentColor"/><circle cx="17" cy="20" r="1.7" fill="currentColor"/></svg>
+                </span>
+                <span class="menu-side-label">Shop</span>
+            </button>
+            <button id="menu-coins" class="coin-pill stat-pill-btn">
+                <span class="coin-icon"></span><span id="menu-coin-count">0</span><span class="shop-plus">+</span>
+            </button>
+            <div class="menu-hint">Chip, melt and scrape the ice off your things!</div>
+        </div>
+
+        <!-- Daily Spin -->
+        <div id="wheel-overlay" class="screen hidden">
+            <div class="panel wheel-panel">
+                <button class="icon-btn panel-close" data-back="btn-wheel-back" title="Close">&#10005;</button>
+                <h2 class="panel-title">Daily Spin</h2>
+                <div class="shop-coin-row">
+                    <span class="coin-icon"></span><span id="wheel-coin-count">0</span>
+                </div>
+                <div class="wheel-wrap">
+                    <div class="wheel-pointer"></div>
+                    <canvas id="wheel-canvas" class="wheel-canvas"></canvas>
+                </div>
+                <div class="wheel-result" id="wheel-result" aria-live="polite"></div>
+                <button id="btn-wheel-spin" class="candy-btn candy-btn-primary">Spin!</button>
+                <button id="btn-wheel-ad" class="candy-btn candy-btn-secondary hidden">Watch an ad for another spin</button>
+                <button id="btn-wheel-back" class="candy-btn candy-btn-secondary">Back</button>
+            </div>
+        </div>
+
+        <!-- Tutorial Prompt -->
+        <div id="tutorial-prompt-overlay" class="screen hidden">
+            <div class="panel tutorial-prompt-panel">
+                <h2 class="panel-title">New Here?</h2>
+                <p class="tutorial-prompt-text">Want a quick tutorial covering the tools, Snowflakes, hints and stars?</p>
+                <div class="tutorial-prompt-actions">
+                    <button id="btn-tutorial-yes" class="candy-btn candy-btn-primary tutorial-prompt-btn">Yes</button>
+                    <button id="btn-tutorial-no" class="candy-btn candy-btn-secondary tutorial-prompt-btn">No</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- How To Play -->
+        <div id="howtoplay-overlay" class="screen hidden">
+            <div class="panel">
+                <button class="icon-btn panel-close" data-back="btn-htp-back" title="Close">&#10005;</button>
+                <h2 class="panel-title">How to Play</h2>
+                <div class="htp-tabs" id="htp-tabs"></div>
+                <div class="htp-sections" id="htp-sections"></div>
+                <button id="btn-htp-back" class="candy-btn candy-btn-secondary">Back</button>
+            </div>
+        </div>
+
+        <!-- Settings -->
+        <div id="settings-overlay" class="screen hidden">
+            <div class="panel">
+                <h2 class="panel-title">Settings</h2>
+                <div class="settings-rows">
+                    <div class="settings-row">
+                        <span class="settings-label">Music</span>
+                        <button id="toggle-music" class="toggle-switch on" role="switch" aria-checked="true"></button>
+                    </div>
+                    <div class="settings-row">
+                        <span class="settings-label">Sound Effects</span>
+                        <button id="toggle-sound" class="toggle-switch on" role="switch" aria-checked="true"></button>
+                    </div>
+                    <div class="settings-row">
+                        <span class="settings-label">Vibration</span>
+                        <button id="toggle-haptics" class="toggle-switch on" role="switch" aria-checked="true"></button>
+                    </div>
+                </div>
+                <!-- Capacitor opens links to other sites in the phone's browser. -->
+                <a id="btn-privacy" class="candy-btn candy-btn-secondary" href="https://sites.google.com/view/unfreezemythings-privacypolicy/pagina-de-pornire" target="_blank" rel="noopener">Privacy Policy</a>
+                <!-- Only shown to players under GDPR (see BreakManager.privacyOptionsRequired). -->
+                <button id="btn-privacy-options" class="candy-btn candy-btn-secondary hidden">Privacy Options</button>
+                <button id="btn-reset-progress" class="candy-btn candy-btn-danger">Reset Progress</button>
+                <button id="btn-settings-back" class="candy-btn candy-btn-secondary">Back</button>
+            </div>
+        </div>
+
+        <!-- My Things (collection) -->
+        <div id="collection-overlay" class="screen hidden">
+            <div class="panel">
+                <button class="icon-btn panel-close" data-back="btn-collection-back" title="Close">&#10005;</button>
+                <h2 class="panel-title">My Things</h2>
+                <div class="collection-count" id="collection-count"></div>
+                <div class="collection-grid" id="collection-grid"></div>
+                <button id="btn-collection-back" class="candy-btn candy-btn-secondary">Back</button>
+            </div>
+        </div>
+
+        <!-- Level Map -->
+        <div id="levelmap-overlay" class="screen hidden">
+            <div class="levelmap-topbar">
+                <div class="stat-pill"><span class="stat-icon heart-icon"></span><span id="map-hearts">5</span></div>
+                <div class="stat-pill"><span class="stat-icon star-icon"></span><span id="map-stars">0</span></div>
+                <button id="btn-map-shop" class="stat-pill stat-pill-btn">
+                    <span class="stat-icon coin-icon"></span><span id="map-coins">0</span><span class="shop-plus">+</span>
+                    <div id="map-shop-hint" class="map-shop-hint hidden">
+                        <div class="map-shop-hint-arrow">&#9650;</div>
+                        <div class="map-shop-hint-text">Check out the shop!</div>
+                    </div>
+                </button>
+                <button id="btn-map-menu" class="icon-btn" title="Menu">&#9776;</button>
+            </div>
+            <div class="levelmap-scroll" id="levelmap-scroll">
+                <div class="levelmap-path" id="levelmap-path"></div>
+            </div>
+        </div>
+
+        <!-- Shop -->
+        <div id="shop-overlay" class="screen hidden">
+            <div class="panel shop-panel">
+                <button class="icon-btn panel-close" data-back="btn-shop-back" title="Close">&#10005;</button>
+                <h2 class="panel-title">Shop</h2>
+                <div class="shop-coin-row">
+                    <span class="coin-icon"></span><span id="shop-coin-count">0</span>
+                    <button id="btn-shop-watch-ad" class="shop-ad-plus" title="Watch an ad for Snowflakes">+</button>
+                </div>
+
+                <div class="shop-tool-tabs" id="shop-tool-tabs">
+                    <button class="shop-tool-tab" data-tool="hairdryer">
+                        <img src="assets/images/ui/hair_dryer_no_background.png" alt="Hairdryer">
+                        <span>Hairdryer</span>
+                    </button>
+                    <button class="shop-tool-tab" data-tool="scraper">
+                        <img src="assets/images/ui/scraper_no_background.png" alt="Ice Scraper">
+                        <span>Ice Scraper</span>
+                    </button>
+                </div>
+
+                <div class="shop-section-label" id="shop-upgrade-label">Hairdryer Upgrades</div>
+                <div class="shop-rows" id="shop-upgrade-rows"></div>
+
+                <div class="shop-section-label">Ice Skins</div>
+                <div class="shop-skins" id="shop-skins"></div>
+
+                <div class="shop-section-label">Hint Charges</div>
+                <div class="shop-hint-row">
+                    <div class="shop-hint-info">
+                        <div class="shop-hint-count"><span class="stat-icon heart-icon"></span><span id="shop-heart-count">5</span> / <span id="shop-heart-max">5</span></div>
+                        <div class="shop-hint-timer" id="shop-heart-timer"></div>
+                        <div class="shop-hint-desc">Spend a hint charge in-level to auto-clear one stuck cell.</div>
+                    </div>
+                    <button id="btn-buy-heart" class="candy-btn candy-btn-secondary shop-buy-btn">Buy 1</button>
+                </div>
+
+                <button id="btn-shop-back" class="candy-btn candy-btn-secondary">Back</button>
+            </div>
+
+            <!-- Shop Tutorial -->
+            <div id="shop-tutorial-overlay" class="screen hidden">
+                <div class="panel tutorial-prompt-panel">
+                    <h2 class="panel-title">Welcome to the Shop!</h2>
+                    <p class="tutorial-prompt-text" id="shop-tutorial-text"></p>
+                    <div class="tutorial-prompt-actions">
+                        <button id="btn-shop-tutorial-next" class="candy-btn candy-btn-primary tutorial-prompt-btn">Next</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Watch Ad Confirm -->
+            <div id="shop-ad-confirm-overlay" class="screen hidden">
+                <div class="panel tutorial-prompt-panel">
+                    <h2 class="panel-title">Watch an Ad?</h2>
+                    <p class="tutorial-prompt-text" id="shop-ad-confirm-text"></p>
+                    <div class="tutorial-prompt-actions">
+                        <button id="btn-shop-ad-yes" class="candy-btn candy-btn-primary tutorial-prompt-btn">Watch Ad</button>
+                        <button id="btn-shop-ad-no" class="candy-btn candy-btn-secondary tutorial-prompt-btn">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading -->
+        <div id="loading-overlay" class="screen hidden">
+            <div class="loading-text">Preparing level...</div>
+            <div class="loading-bar-track">
+                <div class="loading-bar-fill" id="loading-bar-fill"></div>
+            </div>
+        </div>
+
+        <!-- Gameplay -->
+        <div id="gameplay-overlay" class="screen hidden">
+            <div class="gameplay-topbar">
+                <div class="progress-track">
+                    <div class="progress-fill" id="progress-fill"></div>
+                    <div class="progress-label" id="progress-label">0%</div>
+                </div>
+                <div class="timer-pill" id="gameplay-timer">0.0s</div>
+                <div class="coin-pill"><span class="coin-icon"></span><span id="gameplay-coin-count">0</span></div>
+                <button id="btn-gameplay-hint" class="stat-pill gameplay-hint-btn" title="Use a hint charge">
+                    <span class="stat-icon heart-icon"></span><span id="gameplay-hint-count">0</span>
+                    <div id="gameplay-hint-nudge" class="map-shop-hint hidden">
+                        <div class="map-shop-hint-arrow">&#9650;</div>
+                        <div class="map-shop-hint-text">Don't forget to use hints!</div>
+                    </div>
+                </button>
+                <button id="btn-gameplay-back" class="icon-btn gameplay-back-btn" title="Back">&#10005;</button>
+            </div>
+
+            <div class="gameplay-health hidden" id="gameplay-health" title="Cracks your thing can still take"></div>
+            <div class="gameplay-rule hidden" id="gameplay-rule"></div>
+            <div class="gameplay-reveal-name" id="gameplay-reveal-name"></div>
+            <div id="gameplay-floats"></div>
+
+            <div class="combo-label" id="gameplay-combo"></div>
+            <div class="combo-meter-text" id="combo-meter-text"></div>
+
+            <div class="tutorial-callout hidden" id="gameplay-tutorial">
+                <div class="tutorial-hand">&#9757;</div>
+                <div class="tutorial-text" id="tutorial-text"></div>
+            </div>
+
+            <div class="tool-bar">
+                <button id="tool-pickaxe" class="tool-btn" title="Chop">
+                    <img src="assets/images/ui/pickaxe_no_background.png" alt="Pickaxe">
+                </button>
+                <button id="tool-hairdryer" class="tool-btn" title="Melt">
+                    <img src="assets/images/ui/hair_dryer_no_background.png" alt="Hairdryer">
+                    <span class="tool-point" aria-hidden="true">&#128071;</span>
+                </button>
+                <button id="tool-scraper" class="tool-btn" title="Scrape">
+                    <img src="assets/images/ui/scraper_no_background.png" alt="Ice Scraper">
+                    <span class="tool-point" aria-hidden="true">&#128071;</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Level Lost: the object took too many cracks and broke -->
+        <div id="levellost-overlay" class="screen hidden">
+            <div class="levelclear-panel levellost-panel">
+                <h2 class="levelclear-title levellost-title">Oh no, it broke!</h2>
+                <div class="lc-name" id="ll-name"></div>
+                <div class="levellost-actions">
+                    <button id="ll-btn-continue" class="candy-btn candy-btn-primary">&#9654; Watch ad: fix a crack</button>
+                    <button id="ll-btn-retry" class="candy-btn candy-btn-primary">Retry</button>
+                    <button id="ll-btn-map" class="candy-btn candy-btn-secondary lc-btn-map">Map</button>
+                </div>
+                <div class="lc-line" id="ll-msg"></div>
+            </div>
+        </div>
+
+        <!-- Level Clear -->
+        <div id="levelclear-overlay" class="screen hidden">
+            <div class="levelclear-panel">
+                <h2 class="levelclear-title">Unfrozen!</h2>
+                <div class="lc-name" id="lc-name"></div>
+                <div class="levelclear-stars" id="lc-stars">
+                    <span class="lc-star"></span><span class="lc-star"></span><span class="lc-star"></span>
+                </div>
+                <div class="levelclear-stats">
+                    <div id="lc-time" class="lc-line"></div>
+                    <div id="lc-mult" class="lc-line"></div>
+                    <div id="lc-combo" class="lc-line"></div>
+                    <div id="lc-math" class="lc-line"></div>
+                </div>
+                <div id="lc-coins" class="lc-coins">+0 Snowflakes</div>
+                <div class="levelclear-actions" id="lc-actions">
+                    <button id="lc-btn-next" class="candy-btn candy-btn-primary lc-btn-next">Next Level</button>
+                    <button id="lc-btn-map" class="candy-btn candy-btn-secondary lc-btn-map">Map</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--
+      Boot watchdog. Inline, and deliberately NOT a module: src/main.js and everything it
+      imports form a single module graph, so if any one file in it fails to load - a content
+      blocker cancelling the request, a bad path, a 404 - then NONE of it runs, including the
+      error reporting inside main.js itself. Every .screen overlay above starts out `hidden`
+      and only Game.goTo() ever un-hides one, so that failure otherwise presents as a totally
+      blank page: no game, no error, nothing but the body background colour. This script runs
+      regardless of what happens to the module graph, and says what actually went wrong.
+    -->
+    <script>
+    (function () {
+        var BOOT_TIMEOUT_MS = 4000;
+
+        function panel(heading, detail, steps) {
+            if (document.getElementById('startup-error')) return;
+            var box = document.createElement('div');
+            box.id = 'startup-error';
+            box.setAttribute('role', 'alert');
+            box.style.cssText = 'position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;' +
+                'justify-content:center;align-items:center;gap:14px;padding:24px;box-sizing:border-box;' +
+                'background:#1a1030;color:#f3ecff;text-align:center;overflow:auto;' +
+                'font-family:system-ui,Segoe UI,Roboto,sans-serif';
+            var h = document.createElement('h1');
+            h.textContent = heading;
+            h.style.cssText = 'margin:0;font-size:clamp(20px,5vw,30px);color:#ffd479;font-weight:800';
+            var p = document.createElement('p');
+            p.textContent = detail;
+            p.style.cssText = 'margin:0;max-width:54ch;line-height:1.55;font-size:15px;opacity:0.92';
+            box.appendChild(h);
+            box.appendChild(p);
+            if (steps && steps.length) {
+                var ul = document.createElement('ul');
+                ul.style.cssText = 'margin:0;max-width:54ch;text-align:left;line-height:1.7;font-size:14px;opacity:0.9';
+                for (var i = 0; i < steps.length; i++) {
+                    var li = document.createElement('li');
+                    li.textContent = steps[i];
+                    ul.appendChild(li);
+                }
+                box.appendChild(ul);
+            }
+            document.body.appendChild(box);
+        }
+
+        // A cancelled request and a missing one look identical from script-land (both reject),
+        // so re-request a couple of the app's own files to tell the story apart.
+        function probe(url) {
+            return fetch(url, { cache: 'no-store' }).then(
+                function (r) { return r.ok ? 'ok' : 'http-' + r.status; },
+                function () { return 'cancelled'; }
+            );
+        }
+
+        setTimeout(function () {
+            if (window.__defrostGame || document.getElementById('startup-error')) return;
+            Promise.all([probe('src/main.js'), probe('src/engine/BreakManager.js')]).then(function (res) {
+                if (res.indexOf('cancelled') !== -1) {
+                    panel(
+                        'A browser extension is blocking the game',
+                        'One of the game\'s own script files never reached the browser - the request was ' +
+                        'cancelled before it left. That is almost always an ad blocker or privacy extension ' +
+                        '(look for ERR_BLOCKED_BY_CLIENT in the Console). The game loads its scripts as one ' +
+                        'module graph, so a single blocked file stops all of it.',
+                        [
+                            'Click your ad blocker\'s icon and disable it for localhost, then reload.',
+                            'Or open the page in a private/incognito window with extensions turned off.',
+                            'The Network tab shows which file was blocked, in case a filter needs an exception.',
+                        ]
+                    );
+                } else if (res[0] !== 'ok' || res[1] !== 'ok') {
+                    panel(
+                        'The game files could not be loaded',
+                        'The server did not return the game\'s scripts (' + res.join(', ') + '). Serve the ' +
+                        'project from its own folder - start.bat does this - and reload.',
+                        ['Check the Network tab for the failing request.']
+                    );
+                } else {
+                    panel(
+                        'The game failed to start',
+                        'The scripts loaded but the game never finished starting up.',
+                        ['Open the browser console (F12) - the error there says what went wrong.']
+                    );
+                }
+            });
+        }, BOOT_TIMEOUT_MS);
+    })();
+    </script>
+    <script>window.DEMO_LEVELS = 8;</script>
+    <style>#btn-shop-watch-ad, #btn-wheel-ad { display: none !important; }</style>
+    <script type="module" src="src/main.js"></script>
+</body>
+</html>

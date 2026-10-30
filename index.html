@@ -375,6 +375,7 @@ section.block { padding: 104px 0; }
 @media (max-width: 900px) { .download-card { grid-template-columns: 1fr; padding: 36px 24px; gap: 36px; } }
 .download-card h2 { font-size: clamp(36px, 5vw, 54px); margin-bottom: 12px; }
 .download-card > div > p { color: var(--text-dim); margin: 0 0 28px; }
+.demo-note { margin: 22px 0 0; font-size: 15px; color: var(--text-dim); }
 .file-facts {
     display: grid;
     grid-template-columns: auto 1fr;
@@ -490,7 +491,7 @@ footer a:hover { color: var(--text); }
                         <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.6 9.48l1.84-3.18a.38.38 0 00-.66-.38l-1.86 3.22a11.4 11.4 0 00-9.84 0L5.22 5.92a.38.38 0 00-.66.38L6.4 9.48A10.8 10.8 0 001 18h22a10.8 10.8 0 00-5.4-8.52zM7 15.25a1.25 1.25 0 110-2.5 1.25 1.25 0 010 2.5zm10 0a1.25 1.25 0 110-2.5 1.25 1.25 0 010 2.5z"/></svg>
                         Download for Android
                     </a>
-                    <a class="btn btn-ghost" href="#play">See how it plays</a>
+                    <a class="btn btn-ghost" href="play/">Play the demo in your browser</a>
                 </div>
                 <div class="cta-meta">
                     <span>Free</span>
@@ -614,6 +615,7 @@ footer a:hover { color: var(--text); }
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M6 11l6 6 6-6M4 21h16"/></svg>
                         Download APK (35 MB)
                     </a>
+                    <p class="demo-note">On an iPhone? <a href="play/">Play the first 8 levels in your browser.</a></p>
                     <div class="qr-card" id="qr-card">
                         <div class="qr" id="qr"></div>
                         <p><strong>On a computer?</strong>Scan this with your Android phone's camera to open this page there.</p>
@@ -655,7 +657,7 @@ footer a:hover { color: var(--text); }
                 </details>
                 <details>
                     <summary>Is there an iPhone version?</summary>
-                    <p>Not yet. Right now the game is Android-only.</p>
+                    <p>Not yet, but you can <a href="play/">play the first 8 levels in your browser</a> on an iPhone, iPad or computer. Your progress there is kept in that browser.</p>
                 </details>
                 <details>
                     <summary>Do I need to be online?</summary>
